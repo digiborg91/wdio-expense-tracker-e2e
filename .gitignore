@@ -1,0 +1,11 @@
+allure-results/*
+errorShots/*
+node_modules/*
+junit-output/*
+junit-results/*
+npm-debug.log
+allure-report/*
+lib/*
+.env
+debug.log
+.vscode/settings.json
