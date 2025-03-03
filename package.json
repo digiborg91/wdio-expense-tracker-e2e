@@ -10,6 +10,9 @@
     },
     "scripts": {
         "wdio": "wdio run wdio.conf.ts",
+        "clean": "rm -rf ./allure-results",
+        "generate": "allure generate --clean && yarn clean && allure open",
+        "report": "allure generate --clean && allure open",
         "test:local": "npx wdio run wdio.conf.ts",
         "test:docker": "npx wdio run wdio.conf.ts"
     }
