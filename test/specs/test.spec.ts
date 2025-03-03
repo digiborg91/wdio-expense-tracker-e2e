@@ -30,6 +30,7 @@ describe('CRUD Functions of TODO', () => {
         allureReporter.addStory('New TODO can be deleted from the list')
         allureReporter.addStep('Delete Pencil')
         await expenseTracker.deleteTransactionByText('Pencil')
+        await browser.takeScreenshot()
         //delete todo item
         //ensure new price updates and item is removed from list
     })
