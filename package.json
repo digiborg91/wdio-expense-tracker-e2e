@@ -9,6 +9,8 @@
         "wdio-docker-service": "^3.2.1"
     },
     "scripts": {
-        "wdio": "wdio run wdio.conf.ts"
+        "wdio": "wdio run wdio.conf.ts",
+        "test:local": "npx wdio run wdio.conf.ts",
+        "test:docker": "npx wdio run wdio.conf.ts"
     }
 }

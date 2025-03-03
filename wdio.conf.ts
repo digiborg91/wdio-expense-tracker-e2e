@@ -1,3 +1,4 @@
+const isDocker = process.env.SELENIUM_REMOTE_URL !== undefined;
 export const config: WebdriverIO.Config = {
     //
     // ====================
@@ -52,8 +53,11 @@ export const config: WebdriverIO.Config = {
     // https://saucelabs.com/platform/platform-configurator
     //
     capabilities: [{
-        browserName: 'chrome'
-    }],
+        browserName: 'chrome',
+        'goog:chromeOptions': {
+          args: ['--disable-gpu', '--window-size=1920,1080'],
+        }
+      }],
 
     //
     // ===================
@@ -86,23 +90,21 @@ export const config: WebdriverIO.Config = {
     // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
     // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
     // gets prepended directly.
-    // baseUrl: 'http://localhost:8080',
-    //
-    // Default timeout for all waitFor* commands.
+    baseUrl: 'https://track-expenses-v1.netlify.app/',
+    
     waitforTimeout: 10000,
-    //
-    // Default timeout in milliseconds for request
-    // if browser driver or grid doesn't send response
+
     connectionRetryTimeout: 120000,
-    //
-    // Default request retries count
+
     connectionRetryCount: 3,
     //
     // Test runner services
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['docker'],
+    hostname: isDocker ? 'selenium' : 'localhost',  
+    port: 4444,  // Selenium standalone always runs on 4444
+    path: '/',   // Remove /wd/hub for Selenium 4+
 
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
