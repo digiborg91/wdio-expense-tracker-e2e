@@ -4,7 +4,6 @@ export class ExpenseTracker {
     get enterTextField() { return $('#transaction-text'); }
     get enterAmountField() { return $('#transaction-amount'); }
     get addTransactionButton() { return $('#add-transaction-btn'); }
-    //get deleteButton() { return $('.delete-btn'); }
     get balanceAmount() { return $('#balance-amount'); }
     get incomeAmount() { return $('#income-amount'); }
     get expenseAmount() { return $('#expense-amount'); }

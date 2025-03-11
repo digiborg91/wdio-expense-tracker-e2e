@@ -15,6 +15,6 @@
         "report": "allure generate --clean && allure open",
         "test:local": "npx wdio run wdio.conf.ts",
         "test:docker": "npx wdio run wdio.conf.ts",
-        "test": "wdio run ./wdio.conf.ts test/specs/ExpenseTracker.spec.ts"
+        "test:ExpenseTracker": "wdio run ./wdio.conf.ts test/specs/ExpenseTracker.spec.ts"
     }
 }
