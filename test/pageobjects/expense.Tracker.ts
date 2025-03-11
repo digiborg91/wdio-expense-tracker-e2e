@@ -20,16 +20,19 @@ export class ExpenseTracker {
         return this; 
     }
 
+    public async addNewExpense(text: string, amount: string): Promise<ExpenseTracker> {
+        await this.enterTextField.setValue(text);
+        await this.enterAmountField.setValue(amount);
+        return this; 
+    }
+
     public async clickAddTransactionButton() : Promise<ExpenseTracker> {
         await this.addTransactionButton.click();
         return this; 
     }
 
     public async getBalance(): Promise<string> {
-            return this.balanceAmount.getText();
-    }
-    public async verifyBalance(expectedBalance: string): Promise<void> {
-        await expect(this.balanceAmount).toContain(expectedBalance);
+        return this.balanceAmount.getText();
     }
     
     public async getTransactionCount(): Promise<number> {
@@ -47,5 +50,41 @@ export class ExpenseTracker {
           }
         }
         return this;
-      }
+    }
+
+    public async addIncomeExpenseAndCheck(transactions: { text: string, amount: number }[]): Promise<ExpenseTracker> {
+        // Get initial balance
+        const initialBalanceText = await this.balanceAmount.getText();
+        let currentBalance = parseFloat(initialBalanceText.replace("£", "").trim());
+    
+        // Get initial expense amount
+        const initialExpenseText = await this.expenseAmount.getText();
+        let currentExpense = parseFloat(initialExpenseText.replace("£", "").trim());
+    
+        for (const { text, amount } of transactions) {
+            await this.enterTextField.setValue(text);
+            await this.enterAmountField.setValue(amount.toString());
+            await this.addTransactionButton.click();
+    
+            // Update expected values based on income/expense
+            if (amount > 0) {
+                currentBalance += amount; // Adding income increases balance
+            } else {
+                currentExpense += Math.abs(amount); // Expense increases total expense
+                currentBalance += amount; // Subtracting expense reduces balance
+            }
+    
+            const updatedBalanceText = await this.balanceAmount.getText();
+            const updatedBalance = parseFloat(updatedBalanceText.replace("£", "").trim());
+    
+            const updatedExpenseText = await this.expenseAmount.getText();
+            const updatedExpense = parseFloat(updatedExpenseText.replace("£", "").trim());
+    
+            await expect(updatedBalance).toEqual(currentBalance);
+            await expect(updatedExpense).toEqual(currentExpense);
+
+            await browser.takeScreenshot();
+        }
+        return this;
+    }
 }
