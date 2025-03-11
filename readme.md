@@ -12,14 +12,14 @@ This guide provides instructions on setting up and running WebDriverIO tests loc
 ## Prerequisites
 
 
-### **1. Clone the WebDriverIO Repository**
+## **1. Clone the WebDriverIO Repository**
 Clone the repository to your local machine:
 ```sh
 git clone https://github.com/digiborg91/ExpenseTracker.git
 cd ExpenseTracker
 ```
 
-### **2. Install Dependencies**
+## **2. Install Dependencies**
 ```sh
 npm install
 ```
@@ -70,12 +70,14 @@ docker-compose logs -f
 
 ## 🏃‍♂️ Running Tests
 
-### **1. Execute WebDriverIO Tests Locally**
+### **Execute WebDriverIO Tests**
 ```sh
 yarn test:ExpenseTracker
 ```
+---
 
-### **1. Execute WebDriverIO Tests Locally**
+## 📊 Running Allure Report
+### **Execute WebDriverIO Report**
 ``` sh
 yarn report
 ```
