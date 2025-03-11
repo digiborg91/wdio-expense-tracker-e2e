@@ -1,3 +1,4 @@
+import allureReporter from '@wdio/allure-reporter'
 export class ExpenseTracker {
 
     get enterTextField() { return $('#transaction-text'); }
@@ -36,21 +37,51 @@ export class ExpenseTracker {
     }
     
     public async getTransactionCount(): Promise<number> {
-        return (await this.transactionList.$$('li')).length;
+        return (this.transactionList.$$('li')).length;
     }
 
     public async deleteTransactionByText(transactionText: string): Promise<ExpenseTracker> {
-        const transactions = await this.transactionList.$$('li');
-        for (const transaction of transactions) {
-          const text = await transaction.getText();
-          if (text.includes(transactionText)) {
-            const deleteButton = await transaction.$('.delete-btn');
-            await deleteButton.click();
-            break;
-          }
+        // Locate the transaction item based on text
+        const transactionItem = await $(`//li[contains(text(), '${transactionText}')]`);
+    
+        // Wait for the transaction to appear before deleting
+        await transactionItem.waitForDisplayed({ timeout: 5000 });
+    
+        // Get the transaction amount (positive = income, negative = expense)
+        const transactionAmountText = await transactionItem.$('span').getText();
+        const transactionAmount = parseFloat(transactionAmountText.replace(/[^\d.-]/g, '')); // Extract numeric value
+    
+        // Identify if it's an income or expense
+        const isExpense = transactionAmount < 0;
+    
+        // Store previous values for validation
+        const balanceBefore = parseFloat(await this.balanceAmount.getText());
+        const incomeBefore = parseFloat(await this.incomeAmount.getText());
+        const expenseBefore = parseFloat(await this.expenseAmount.getText());
+    
+        // Click the delete button
+        const deleteButton = await transactionItem.$('.delete-btn');
+        await deleteButton.click();
+    
+        // Wait for transaction to be removed
+        await transactionItem.waitForExist({ reverse: true, timeout: 5000 });
+    
+        // Verify balance and income/expense updates
+        const balanceAfter = parseFloat(await this.balanceAmount.getText());
+        const incomeAfter = parseFloat(await this.incomeAmount.getText());
+        const expenseAfter = parseFloat(await this.expenseAmount.getText());
+    
+        if (isExpense) {
+            expect(expenseAfter).toEqual(expenseBefore - Math.abs(transactionAmount));
+            expect(balanceAfter).toEqual(balanceBefore + Math.abs(transactionAmount));
+        } else {
+            expect(incomeAfter).toEqual(incomeBefore - transactionAmount);
+            expect(balanceAfter).toEqual(balanceBefore - transactionAmount);
         }
+
+        await browser.takeScreenshot();
         return this;
-    }
+    }    
 
     public async addIncomeExpenseAndCheck(transactions: { text: string, amount: number }[]): Promise<ExpenseTracker> {
         // Get initial balance

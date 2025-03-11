@@ -3,7 +3,7 @@ import { ExpenseTracker } from '../pageobjects/expense.Tracker.ts'
 
 const expenseTracker = new ExpenseTracker()
 
-describe('CRUD Functions of EXPENSE', () => {
+describe('The Expense Tracker UAT Tests', () => {
     
     beforeAll(async () => {
         await browser.url('https://track-expenses-v1.netlify.app/')
@@ -35,12 +35,17 @@ describe('CRUD Functions of EXPENSE', () => {
         await expenseTracker.addIncomeExpenseAndCheck([{ text: "Petrol", amount: -125 }]);
     })
 
-    xit ('Verify Item can be Deleted', async () => {
-        allureReporter.addStory('Remove an Item & ensure the Item is Removed From List & Price Decreases')
-        allureReporter.addStep('Delete Pencil')
-        await expenseTracker.deleteTransactionByText('Pencil')
-        await browser.takeScreenshot()
-        //delete todo item
-        //ensure new price updates and item is removed from list EXPECT Statement
+    it ('Verify Income can be Deleted', async () => {
+        allureReporter.addStory('Remove the Investment Income Item & Ensure the Item is Removed From List & Price Decreases')
+
+        allureReporter.addStep('Delete Investment')
+        await expenseTracker.deleteTransactionByText('Investment')
+    })
+
+    it ('Verify Expense can be Deleted', async () => {
+        allureReporter.addStory('Remove the Children Expense Item & Ensure the Item is Removed From List & Price Decreases')
+
+        allureReporter.addStep('Delete Children')
+        await expenseTracker.deleteTransactionByText('Children')
     })
 })
