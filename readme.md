@@ -1,12 +1,12 @@
-# WebDriverIO Automation Setup with Docker, Selenium, and CI/CD
+# 🌐 WebDriverIO Automation Setup with Docker, Selenium, and CI/CD
 
-## Overview
+## 📖 Overview
 This guide provides instructions on setting up and running WebDriverIO tests locally using Docker, Selenium, and a live app URL.
 
-### Target URL of the live app:
+### 🎯 Target URL of the live app:
 [https://track-expenses-v1.netlify.app/](https://track-expenses-v1.netlify.app/)
 
-### The project can be found on GitHub:
+### 📂 The project can be found on GitHub:
 [https://github.com/digiborg91/ExpenseTracker](https://github.com/digiborg91/ExpenseTracker)
 
 ## Prerequisites
@@ -20,10 +20,11 @@ cd ExpenseTracker
 ```
 
 ### **2. Install Dependencies**
-```npm install
+```sh
+npm install
 ```
 
-## 3. **Install Docker & Docker-Compose Locally**
+## 🐳3. **Install Docker & Docker-Compose Locally**
 
 ### **1. Create `docker-compose.yml`**
 Ensure you have the following `docker-compose.yml` in your project root:
@@ -67,7 +68,7 @@ docker-compose logs -f
 
 ---
 
-## Running Tests
+## 🏃‍♂️ Running Tests
 
 ### **1. Execute WebDriverIO Tests Locally**
 ```sh
