@@ -1,19 +1,60 @@
 services:
-  selenium:
-    image: selenium/standalone-chrome:120.0
-    shm_size: 2gb
+  selenium-hub:
+    image: selenium/hub:4.19.1
+    container_name: selenium-hub
     ports:
-      - "4444:4444"  # WebDriver port
-      - "7900:7900"  # VNC port (to be enabled)
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+
+  chrome:
+    image: selenium/node-chrome:120.0
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub
     environment:
-      - SE_NODE_MAX_INSTANCES=1
-      - SE_NODE_MAX_SESSIONS=1
-      - SE_VNC_NO_PASSWORD=1  # Allow VNC without password
-      - START_XVFB=true  # Start virtual display
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=2
+      - SE_VNC_NO_PASSWORD=1
+    ports:
+      - "7900:7900"
+
+  firefox:
+    image: selenium/node-firefox:120.0
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=2
+      - SE_VNC_NO_PASSWORD=1
+    ports:
+      - "7901:7900"
+
+  edge:
+    image: selenium/node-edge:120.0
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=2
+      - SE_VNC_NO_PASSWORD=1
+    ports:
+      - "7902:7900"
 
   tests:
     build: .
     depends_on:
-      - selenium
+      - selenium-hub
+      - chrome
+      - firefox
+      - edge
     environment:
-      - SELENIUM_REMOTE_URL=http://selenium:4444/wd/hub
+      - SELENIUM_REMOTE_URL=http://selenium-hub:4444

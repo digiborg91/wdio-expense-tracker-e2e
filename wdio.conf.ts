@@ -8,21 +8,6 @@ export const config: WebdriverIO.Config = {
     runner: 'local',
     tsConfigPath: './tsconfig.json',
     
-    //
-    // ==================
-    // Specify Test Files
-    // ==================
-    // Define which test specs should run. The pattern is relative to the directory
-    // of the configuration file being run.
-    //
-    // The specs are defined as an array of spec files (optionally using wildcards
-    // that will be expanded). The test for each spec file will be run in a separate
-    // worker process. In order to have a group of spec files run in the same worker
-    // process simply enclose them in an array within the specs array.
-    //
-    // The path of the spec files will be resolved relative from the directory of
-    // of the config file unless it's absolute.
-    //
     specs: [
         './test/specs/**/*.ts'
     ],
@@ -32,56 +17,38 @@ export const config: WebdriverIO.Config = {
     ],
     //
     // ============
-    // Capabilities
-    // ============
-    // Define your capabilities here. WebdriverIO can run multiple capabilities at the same
-    // time. Depending on the number of capabilities, WebdriverIO launches several test
-    // sessions. Within your capabilities you can overwrite the spec and exclude options in
-    // order to group specific specs to a specific capability.
-    //
-    // First, you can define how many instances should be started at the same time. Let's
-    // say you have 3 different capabilities (Chrome, Firefox, and Safari) and you have
-    // set maxInstances to 1; wdio will spawn 3 processes. Therefore, if you have 10 spec
-    // files and you set maxInstances to 10, all spec files will get tested at the same time
-    // and 30 processes will get spawned. The property handles how many capabilities
-    // from the same test should run tests.
     //
     maxInstances: 10,
-    //
-    // If you have trouble getting all important capabilities together, check out the
-    // Sauce Labs platform configurator - a great tool to configure your capabilities:
-    // https://saucelabs.com/platform/platform-configurator
-    //
-    capabilities: [{
+
+    capabilities: [    {
         browserName: 'chrome',
+        acceptInsecureCerts: true,
         'goog:chromeOptions': {
-          args: ['--disable-gpu', '--window-size=1920,1080'],
+            args: ['--disable-gpu', '--window-size=1920,1080'],
         }
-      }],
+    },
+    {
+        browserName: 'firefox',
+        'moz:firefoxOptions': {
+            args: ['--window-size=1920,1080'],
+        }
+    },
+    {
+        browserName: 'MicrosoftEdge',
+        'ms:edgeOptions': {
+            args: ['--disable-gpu', '--window-size=1920,1080'],
+        }
+    }
+],
 
     //
     // ===================
     // Test Configurations
     // ===================
-    // Define all options that are relevant for the WebdriverIO instance here
     //
     // Level of logging verbosity: trace | debug | info | warn | error | silent
     logLevel: 'info',
-    //
-    // Set specific log levels per logger
-    // loggers:
-    // - webdriver, webdriverio
-    // - @wdio/browserstack-service, @wdio/lighthouse-service, @wdio/sauce-service
-    // - @wdio/mocha-framework, @wdio/jasmine-framework
-    // - @wdio/local-runner
-    // - @wdio/sumologic-reporter
-    // - @wdio/cli, @wdio/config, @wdio/utils
-    // Level of logging verbosity: trace | debug | info | warn | error | silent
-    // logLevels: {
-    //     webdriver: 'info',
-    //     '@wdio/appium-service': 'info'
-    // },
-    //
+
     // If you only want to run your tests until a specific amount of tests have failed use
     // bail (default is 0 - don't bail, run all tests).
     bail: 0,
@@ -102,7 +69,8 @@ export const config: WebdriverIO.Config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    hostname: isDocker ? 'selenium' : 'localhost',  
+    services: [],
+    hostname: isDocker ? 'selenium-hub' : 'localhost', 
     port: 4444,  // Selenium standalone always runs on 4444
     path: '/',   // Remove /wd/hub for Selenium 4+
 
