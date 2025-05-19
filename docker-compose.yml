@@ -58,3 +58,6 @@ services:
       - edge
     environment:
       - SELENIUM_REMOTE_URL=http://selenium-hub:4444
+    volumes:
+      - ./allure-results:/app/allure-results
+      - ./screenshots:/app/screenshots
